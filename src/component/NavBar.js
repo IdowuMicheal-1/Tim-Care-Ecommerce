@@ -98,7 +98,7 @@ const Wrapper = styled.div`
   @media (${QUERIES.tabletAndDown}) {
     padding-left: 16px;
     padding-right: 16px;
-    position: sticky;
+    position: fixed;
     width:100%;
     top:0;
     isolation: isolate;
