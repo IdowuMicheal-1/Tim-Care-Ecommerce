@@ -1,4 +1,4 @@
-import React, { useContext, useState,useMemo } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import image1 from "../assets/image 1.png";
 import image2 from "../assets/image 1 (1).png";
 import image3 from "../assets/image 1 (2).png";
@@ -125,10 +125,10 @@ const PRODUCT_CATEGORIES = [
 ];
 
 const ProductShow = () => {
-  
-  const [filterCgy,setFilterCgy] = useState([]);
+  const [filterCgy, setFilterCgy] = useState([]);
   const { items, addItems } = useContext(CartContext);
-  const {category,setCategory,search,setSearch} = useContext(SearchContext)
+  const { category, setCategory, search, setSearch } =
+    useContext(SearchContext);
 
   const addCartHandler = (id, name, image, price, discount, label) => {
     addItems({
@@ -141,65 +141,76 @@ const ProductShow = () => {
       label,
     });
   };
-  
+
   const GET_PRODUCT = useMemo(() => {
     return PRODUCTS.filter((item) => {
-      const matchesCategory = category === "All Product" || item.category === category;
+      const matchesCategory =
+        category === "All Product" || item.category === category;
       const matchesSearch = search
         ? item.name.toLowerCase().includes(search.toLowerCase())
         : true;
       return matchesCategory && matchesSearch;
     });
   }, [category, search]);
-    
-  
-  
+
   return (
     <Wrapper>
-      
       <CategoryWrapper>
         <ListWrapper>
           <SubNameWrapper>CATEGORIES</SubNameWrapper>
-          {PRODUCT_CATEGORIES.map((items,index) => {
-            return <li style={{color:category === items ? `${COLORS.pink}` : ""}} key={index} onClick={() => setCategory(items)}>{items}</li>;
+          {PRODUCT_CATEGORIES.map((items, index) => {
+            return (
+              <li
+                style={{ color: category === items ? `${COLORS.pink}` : "" }}
+                key={index}
+                onClick={() => setCategory(items)}
+              >
+                {items}
+              </li>
+            );
           })}
         </ListWrapper>
       </CategoryWrapper>
       <ImagWrapper>
-        {
-          GET_PRODUCT.length === 0 ? (<p>No products found matching your criteria.</p>) : (GET_PRODUCT.map(({ id, name, image, price, discount, color, label }) => (
-            <DivWrapper key={id}>
-              {label === "" ? (
-                ""
-              ) : (
-                <Tag color={label === "Sale" ? "pink" : "purple"}>{label}</Tag>
-              )}
-              <ImageStyle src={image} alt={name} />
-              <ProductOne>
-                <ProductTitle>{name}</ProductTitle>
-                <ProductPrice>
-                  {discount === "" ? price : <del>{price}</del>}
-                </ProductPrice>
-              </ProductOne>
-              <div>
+        {GET_PRODUCT.length === 0 ? (
+          <p>No products found matching your criteria.</p>
+        ) : (
+          GET_PRODUCT.map(
+            ({ id, name, image, price, discount, color, label }) => (
+              <DivWrapper key={id}>
+                {label === "" ? (
+                  ""
+                ) : (
+                  <Tag color={label === "Sale" ? "pink" : "purple"}>
+                    {label}
+                  </Tag>
+                )}
+                <ImageStyle src={image} alt={name} />
                 <ProductOne>
-                  <ProductColor>
-                    {color === "" ? "" : `${color} color`}
-                  </ProductColor>
-                  <PriceDiscount>{discount}</PriceDiscount>
+                  <ProductTitle>{name}</ProductTitle>
+                  <ProductPrice>
+                    {discount === "" ? price : <del>{price}</del>}
+                  </ProductPrice>
                 </ProductOne>
-                <AddCartButton
-                  onClick={() =>
-                    addCartHandler(id, name, image, price, discount, label)
-                  }
-                >
-                  Add to Cart
-                </AddCartButton>
-              </div>
-            </DivWrapper>
-          )))
-        }
-        
+                <div>
+                  <ProductOne>
+                    <ProductColor>
+                      {color === "" ? "" : `${color} color`}
+                    </ProductColor>
+                    <PriceDiscount>{discount}</PriceDiscount>
+                  </ProductOne>
+                  <AddCartButton
+                    onClick={() =>
+                      addCartHandler(id, name, image, price, discount, label)
+                    }
+                  >
+                    Add to Cart
+                  </AddCartButton>
+                </div>
+              </DivWrapper>
+            )
+          )
+        )}
       </ImagWrapper>
     </Wrapper>
   );
@@ -233,10 +244,7 @@ const ListWrapper = styled.ul`
   /* left:0; */
   list-style: none;
   align-self: flex-end;
-  /* border:1px solid black; */
-  /* padding-top: 270px;
-margin-top: -70px; */
-  /* margin-left: 30px; */
+ 
 
   & > li {
     font-size: 16px;
@@ -261,12 +269,15 @@ const DivWrapper = styled.div`
   max-width: 350px;
   margin: 16px;
   flex: 1;
+  overflow: hidden;
+  border-radius: 16px 16px 0px 0px;
 `;
 
 const ImagWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin: -16px;
+  cursor: pointer;
 `;
 
 const AddCartButton = styled.button`
@@ -320,6 +331,15 @@ const PriceDiscount = styled.p`
 const ImageStyle = styled.img`
   margin-bottom: 12px;
   width: 100%;
+  transition: transform 350ms ease-in-out;
+  will-change: transform;
+  transform-origin: 50% 75%;
+
+  @media (hover:hover) and (prefers-reduced-motion:no-preference) {
+    ${DivWrapper}:hover &{
+      transform:scale(1.1);
+    }
+  }
 `;
 
 export default ProductShow;
